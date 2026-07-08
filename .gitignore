@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+*.db
+*.sqlite
+*.sqlite3
+.venv/
+venv/
+ENV/
+env/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env.local
+npm-debug.log*
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files (contain secrets!)
+.env
+backend/.env
+frontend/.env.local
+
+# Alembic
+backend/alembic/versions/__pycache__/
+
+# Pyodide cache
+.pyodide/
