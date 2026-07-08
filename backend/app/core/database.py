@@ -9,17 +9,21 @@ from sqlalchemy.pool import NullPool
 from app.core.config import settings
 
 # --- Engine creation ---
+# IMPORTANT: create_async_engine needs an ASYNC driver in the URL.
+# Render's DATABASE_URL comes as plain 'postgresql://...' (sync/psycopg2 dialect),
+# so we always go through settings.async_database_url, which rewrites it to
+# 'postgresql+asyncpg://...' when needed. SQLite passes through untouched.
 if settings.is_postgres:
     # PostgreSQL on Render
     async_engine = create_async_engine(
-        settings.DATABASE_URL,
+        settings.async_database_url,
         poolclass=NullPool,
         echo=False,
     )
 else:
     # SQLite locally
     async_engine = create_async_engine(
-        settings.DATABASE_URL,
+        settings.async_database_url,
         echo=False,
         connect_args={"check_same_thread": False},
     )

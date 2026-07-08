@@ -34,7 +34,7 @@ class Settings(BaseSettings):
 
     @property
     def sync_database_url(self) -> str:
-        """Alembic needs sync driver."""
+        """Alembic offline mode / anything needing a sync driver."""
         url = self.DATABASE_URL
         if url.startswith("sqlite+aiosqlite"):
             return url.replace("sqlite+aiosqlite", "sqlite")
@@ -42,6 +42,21 @@ class Settings(BaseSettings):
             return url.replace("+asyncpg", "")
         if url.startswith("postgresql+psycopg"):
             return url.replace("+psycopg", "+psycopg2")
+        return url
+
+    @property
+    def async_database_url(self) -> str:
+        """SQLAlchemy async engine needs an async driver in the URL.
+        Render's Postgres connectionString comes as 'postgresql://...' —
+        that's the SYNC (psycopg2) dialect. We rewrite it to use asyncpg.
+        SQLite already has +aiosqlite by default, so it passes through untouched.
+        """
+        url = self.DATABASE_URL
+        if url.startswith("postgres://"):
+            # Old-style scheme some providers still use
+            return url.replace("postgres://", "postgresql+asyncpg://", 1)
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+asyncpg://", 1)
         return url
 
     # Firebase

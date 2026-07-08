@@ -13,7 +13,9 @@ from app.models.models import *  # noqa: F401,F403 — register all models
 
 # Alembic Config object
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.sync_database_url)
+# async_engine_from_config() below needs an ASYNC driver in the URL
+# (Render's DATABASE_URL is plain 'postgresql://...', sync dialect).
+config.set_main_option("sqlalchemy.url", settings.async_database_url)
 
 # Logging
 if config.config_file_name:
