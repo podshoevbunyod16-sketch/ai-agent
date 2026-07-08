@@ -4,7 +4,6 @@ services:
   - type: web
     name: ai-chat-backend
     env: python
-    plan: free
     buildCommand: cd backend && pip install -r requirements.txt
     startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
     envVars:
@@ -32,7 +31,6 @@ services:
   - type: web
     name: ai-chat-frontend
     env: static
-    plan: free
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
     envVars:
@@ -53,6 +51,5 @@ services:
 
 databases:
   - name: ai-chat-db
-    plan: free
     databaseName: ai_chat
     user: ai_chat_user
