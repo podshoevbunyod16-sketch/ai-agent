@@ -12,9 +12,16 @@
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
       </button>
     </div>
+
+    <!-- ВЕРХНИЙ ПРАВЫЙ УГОЛ: выбор модели -->
     <div class="flex items-center gap-2 text-xs text-stone-500">
-      <span class="hidden sm:inline">Claude 3.5 Sonnet</span>
-      <span class="w-1 h-1 bg-green-500 rounded-full"></span>
+      <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+      <select id="model-select" class="bg-stone-50 border border-stone-200 rounded-lg px-2.5 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer">
+        <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+        <option value="claude-3-opus">Claude 3 Opus</option>
+        <option value="claude-3-haiku">Claude 3 Haiku</option>
+        <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Groq)</option>
+      </select>
     </div>
   </div>
 
@@ -39,11 +46,16 @@
               </span>
               Расширенное мышление
             </label>
-            <select id="model-select" class="bg-stone-50 border border-stone-200 rounded-lg px-2 py-1 text-xs">
-              <option>Claude 3.5 Sonnet</option>
-              <option>Claude 3 Opus</option>
-              <option>Claude 3 Haiku</option>
-            </select>
+
+            <!-- НОВЫЙ ПЕРЕКЛЮЧАТЕЛЬ: Google Search -->
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="web-search-toggle" class="sr-only peer">
+              <span class="w-9 h-5 bg-stone-200 rounded-full relative transition peer-checked:bg-blue-600">
+                <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-4"></span>
+              </span>
+              🔍 Google Search
+            </label>
+
             <button class="hover:text-stone-700 hidden sm:block" title="Прикрепить файл">📎</button>
           </div>
           <button id="send-btn" class="px-4 py-2 rounded-xl bg-[#d97706] text-white text-sm font-medium hover:bg-[#b45309] disabled:opacity-50 flex items-center gap-2">

@@ -12,6 +12,19 @@ async function ensureConversation(){
   return c.id;
 }
 
+function escapeHtml(text){
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatContent(text){
+  let html = escapeHtml(text);
+  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (m,lang,code)=>{
+    return `<pre class="bg-stone-900 text-stone-100 rounded-xl p-3 my-2 text-[13px] overflow-x-auto">${code}</pre>`;
+  });
+  html = html.replace(/\n/g,'<br>');
+  return html;
+}
+
 function renderMessages(){
   const inner = document.getElementById('messages-inner');
   if(!messagesCache.length){
@@ -32,12 +45,12 @@ function renderMessages(){
       document.querySelectorAll('.starter').forEach(b=> b.onclick = ()=>{ document.getElementById('chat-input').value = b.dataset.prompt; sendMessage(); });
     return;
   }
-  inner.innerHTML = messagesCache.map(m=>{
+  inner.innerHTML = messagesCache.map((m,idx)=>{
     const isUser = m.role==='user';
     return `<div class="flex ${isUser?'justify-end':''}">
       <div class="max-w-[85%] ${isUser?'msg-user':'msg-assistant'} rounded-2xl px-4 py-3 shadow-sm">
         <div class="text-[11px] text-stone-500 mb-1">${isUser?'Вы':'Claude'}</div>
-        <div class="text-[15px] leading-relaxed whitespace-pre-wrap break-words">${formatContent(m.content)}</div>
+        <div class="msg-content text-[15px] leading-relaxed whitespace-pre-wrap break-words" data-idx="${idx}">${formatContent(m.content)}</div>
         ${m.artifacts && m.artifacts.length ? `
           <div class="mt-3 flex flex-wrap gap-2">
             ${m.artifacts.map(a=>`<button onclick="loadArtifact(${a.id})" class="text-xs px-2.5 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100">📄 ${a.title||a.language}</button>`).join('')}
@@ -49,23 +62,33 @@ function renderMessages(){
   box.scrollTop = box.scrollHeight;
 }
 
-function formatContent(text){
-  // simple: escape html, convert code blocks
-  let html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  // code blocks
-  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (m,lang,code)=>{
-    return `<pre class="bg-stone-900 text-stone-100 rounded-xl p-3 my-2 text-[13px] overflow-x-auto">${code}</pre>`;
-  });
-  html = html.replace(/\n/g,'<br>');
-  return html;
-}
-
 async function loadMessages(){
   if(!currentConversationId){ renderMessages(); return; }
   const r = await fetch(`/api/conversations/${currentConversationId}/messages`);
   if(!r.ok) return;
   messagesCache = await r.json();
   renderMessages();
+}
+
+// --- Эффект "печатной машинки" ---
+function typeWriter(el, text, speed=12){
+  return new Promise(resolve=>{
+    let i = 0;
+    el.textContent = '';
+    el.classList.add('typing-cursor');
+    const box = document.getElementById('messages');
+    const timer = setInterval(()=>{
+      const chunk = text.length > 400 ? 3 : 1;
+      el.textContent += text.slice(i, i+chunk);
+      i += chunk;
+      box.scrollTop = box.scrollHeight;
+      if(i>=text.length){
+        clearInterval(timer);
+        el.classList.remove('typing-cursor');
+        resolve();
+      }
+    }, speed);
+  });
 }
 
 async function sendMessage(){
@@ -76,29 +99,44 @@ async function sendMessage(){
   sendBtn.disabled = true;
   input.value=''; autoResize();
   const cid = await ensureConversation();
-  // optimistic
+
   messagesCache.push({role:'user', content, artifacts:[]});
   renderMessages();
-  // typing skeleton
+
   messagesCache.push({role:'assistant', content:'⏳ Claude думает...', artifacts:[]});
   renderMessages();
+
   try{
     const extended = document.getElementById('extended-thinking').checked;
+    const webSearch = document.getElementById('web-search-toggle').checked;
     const model = document.getElementById('model-select').value;
     const r = await fetch(`/api/conversations/${cid}/messages`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({content, extended_thinking:extended, model})
+      body: JSON.stringify({content, extended_thinking:extended, web_search:webSearch, model})
     });
     const data = await r.json();
-    messagesCache.pop(); // remove skeleton
-    // reload full history to be safe
-    await loadMessages();
-    // open first artifact
+
+    messagesCache.pop();
+    messagesCache.push({role:'assistant', content:'', artifacts:[]});
+    renderMessages();
+
+    const nodes = document.querySelectorAll('.msg-content');
+    const targetEl = nodes[nodes.length-1];
+    if(targetEl){
+      await typeWriter(targetEl, data.message.content);
+    }
+
+    messagesCache[messagesCache.length-1] = {
+      role:'assistant',
+      content: data.message.content,
+      artifacts: data.artifacts || []
+    };
+    renderMessages();
+
     if(data.artifacts && data.artifacts.length){
       openArtifact(data.artifacts[0]);
     }
-    // update title
     document.getElementById('chat-title').textContent = 'Чат #'+cid;
     if(typeof loadSidebarConversations==='function') loadSidebarConversations();
   }catch(e){
@@ -133,7 +171,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
   btn.addEventListener('click', sendMessage);
 
-  // rename chat
   document.getElementById('rename-chat')?.addEventListener('click', async ()=>{
     const title = prompt('Новое название чата:');
     if(!title || !currentConversationId) return;

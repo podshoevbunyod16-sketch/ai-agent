@@ -12,6 +12,8 @@ class Config:
     ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
     OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY', '')
     GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
+    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', '')
+    GOOGLE_CSE_ID = os.getenv('GOOGLE_CSE_ID', '')
     
     AI_PROVIDER = os.getenv('AI_PROVIDER', 'mock')  # anthropic, openrouter, groq, mock
     AI_MODEL = os.getenv('AI_MODEL', 'claude-3-5-sonnet-20241022')

@@ -9,3 +9,13 @@ body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSy
 @keyframes shimmer { 0% {background-position:200% 0} 100% {background-position:-200% 0} }
 .chat-row:hover .chat-row-actions { opacity: 1; }
 pre code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+/* Эффект "печатной машинки" — мигающий курсор в конце печатаемого текста */
+.typing-cursor::after {
+  content: '▋';
+  display: inline-block;
+  margin-left: 2px;
+  color: #d97706;
+  animation: blink-cursor 0.9s steps(1) infinite;
+}
+@keyframes blink-cursor { 50% { opacity: 0; } }
