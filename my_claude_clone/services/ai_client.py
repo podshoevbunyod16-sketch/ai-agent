@@ -1,9 +1,11 @@
 import os
 import re
+import json
 import logging
 from config import Config
 
 logger = logging.getLogger(__name__)
+
 
 def extract_artifacts(text):
     """Извлекает блоки кода ```lang ... ```"""
@@ -17,6 +19,7 @@ def extract_artifacts(text):
             'title': f"{lang or 'code'} snippet"
         })
     return artifacts
+
 
 class AIClient:
     def __init__(self):
@@ -38,10 +41,29 @@ class AIClient:
             logger.exception("AI chat error")
             return f"Ошибка AI провайдера: {str(e)}\n\n[Mock fallback]\n{self._mock_chat(messages)}"
 
+    def chat_stream(self, messages, tools=None, tool_executor=None):
+        """
+        Потоковая генерация ответа (генератор, отдаёт куски текста по мере готовности).
+
+        Если переданы tools (MCP-инструменты в формате OpenAI function calling) —
+        сначала выполняется цикл вызова инструментов (не потоково, максимум 4 итерации),
+        а уже финальный текстовый ответ пользователю стримится по кусочкам.
+
+        tool_executor(tool_name, arguments_dict) -> str   — функция вызова MCP-инструмента.
+        """
+        try:
+            if self.provider == 'groq' and Config.GROQ_API_KEY:
+                yield from self._groq_chat_stream(messages, tools, tool_executor)
+            else:
+                answer = self.chat(messages)
+                yield answer
+        except Exception as e:
+            logger.exception("AI stream error")
+            yield f"\n\n⚠️ Ошибка AI провайдера: {str(e)}"
+
     def _anthropic_chat(self, messages, extended_thinking=False):
         from anthropic import Anthropic
         client = Anthropic(api_key=Config.ANTHROPIC_API_KEY)
-        # Convert to anthropic format
         system_msg = ""
         chat_msgs = []
         for m in messages:
@@ -82,13 +104,77 @@ class AIClient:
         )
         return completion.choices[0].message.content
 
+    def _groq_chat_stream(self, messages, tools=None, tool_executor=None):
+        from openai import OpenAI
+        client = OpenAI(
+            api_key=Config.GROQ_API_KEY,
+            base_url="https://api.groq.com/openai/v1"
+        )
+        model_name = self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile"
+        work_messages = list(messages)
+
+        if tools:
+            tool_check = client.chat.completions.create(
+                model=model_name,
+                messages=work_messages,
+                tools=tools,
+                tool_choice="auto",
+                max_tokens=1024,
+            )
+            choice = tool_check.choices[0]
+            tool_calls = getattr(choice.message, 'tool_calls', None)
+
+            loop_count = 0
+            while tool_calls and loop_count < 4:
+                loop_count += 1
+                work_messages.append({
+                    "role": "assistant",
+                    "content": choice.message.content or "",
+                    "tool_calls": [
+                        {
+                            "id": tc.id,
+                            "type": "function",
+                            "function": {"name": tc.function.name, "arguments": tc.function.arguments}
+                        } for tc in tool_calls
+                    ]
+                })
+                for tc in tool_calls:
+                    try:
+                        args = json.loads(tc.function.arguments or "{}")
+                    except json.JSONDecodeError:
+                        args = {}
+                    result_text = tool_executor(tc.function.name, args) if tool_executor else "Инструмент недоступен"
+                    work_messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": str(result_text)[:4000]
+                    })
+                tool_check = client.chat.completions.create(
+                    model=model_name,
+                    messages=work_messages,
+                    tools=tools,
+                    tool_choice="auto",
+                    max_tokens=1024,
+                )
+                choice = tool_check.choices[0]
+                tool_calls = getattr(choice.message, 'tool_calls', None)
+
+        stream = client.chat.completions.create(
+            model=model_name,
+            messages=work_messages,
+            stream=True,
+        )
+        for chunk in stream:
+            delta = chunk.choices[0].delta
+            if delta and delta.content:
+                yield delta.content
+
     def _mock_chat(self, messages):
-        last_user = next((m['content'] for m in reversed(messages) if m['role']=='user'), 'Привет')
-        # smart mock: if user asks code, return artifact
+        last_user = next((m['content'] for m in reversed(messages) if m['role'] == 'user'), 'Привет')
         if any(k in last_user.lower() for k in ['код', 'code', 'python', 'react', 'html', 'функци', 'скрипт', 'artifact', 'артефакт']):
             return f"""Отлично, вот решение для: "{last_user[:80]}"
 
-Я создал артефакт справа, где вы можете его отредактировать.
+Я создал артефакт согласно вашей задаче, где вы можете его отредактировать.
 
 ```python
 # Claude Code Artifact
@@ -105,37 +191,16 @@ def solve_problem(input_data):
 if __name__ == "__main__":
     print(solve_problem("{last_user[:30]}"))
 ```
-
-Также могу добавить React-компонент:
-
-```jsx
-import { useState } from 'react';
-
-export default function ClaudeComponent() {{
-  const [input, setInput] = useState('{last_user[:20]}');
-  return (
-    <div className="p-6 rounded-2xl shadow bg-white">
-      <h2 className="text-xl font-semibold">Claude Artifact</h2>
-      <p className="text-gray-600 mt-2">{{input}}</p>
-    </div>
-  );
-}}
-```
-
-Нужно доработать?"""
+"""
         return f"""Привет! Я Claude Clone — ваш AI-ассистент.
 
 Вы спросили: "{last_user}"
 
 Вот мой ответ в стиле Claude:
 
-- Я могу помогать с кодом, анализом, письмом
-- Артефакты автоматически появятся справа
-- Поддерживаю проекты и Claude Code Jobs
+- Я могу помочь с кодом, анализом, поиском
+- Артефакты автоматически создаются из кода
+- Подключайте MCP-серверы и Claude Code Jobs"""
 
-Попробуйте: "напиши python скрипт для парсинга CSV" — и увидите артефакт.
-
-Расширенное мышление: {'включено' if any('extended' in str(m) for m in messages) else 'выключено'}.
-"""
 
 ai_client = AIClient()
