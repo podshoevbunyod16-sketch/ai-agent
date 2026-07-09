@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Claude Code — Jobs{% endblock %}
+{% block content %}
+<div class="h-screen flex flex-col">
+  <div class="border-b border-stone-200 bg-white px-6 lg:px-10 py-5">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold">Claude Code</h1>
+        <p class="text-sm text-stone-500 mt-1">Асинхронные задачи через MCP-серверы</p>
+      </div>
+      <button id="new-job-btn" class="px-4 py-2 rounded-xl bg-[#d97706] text-white text-sm font-medium">+ Новая задача</button>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-6 lg:px-10 py-6 max-w-5xl w-full mx-auto">
+    <div id="jobs-list" class="space-y-3"></div>
+    <div id="jobs-empty" class="hidden text-center py-16 text-stone-500">Нет задач. Создайте первую Claude Code задачу.</div>
+  </div>
+</div>
+
+<!-- Job Modal -->
+<div id="job-modal" class="hidden fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6">
+    <h3 class="text-lg font-semibold mb-4">Новая Claude Code задача</h3>
+    <div class="space-y-3">
+      <input id="job-title" placeholder="Название" class="w-full px-3 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/30">
+      <select id="job-mcp" class="w-full px-3 py-2.5 border rounded-xl bg-white">
+        <option value="">Загрузка MCP серверов...</option>
+      </select>
+      <textarea id="job-prompt" placeholder="Промпт / инструкция для агента..." class="w-full h-32 px-3 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/30"></textarea>
+      <input id="job-desc" placeholder="Описание (опционально)" class="w-full px-3 py-2.5 border rounded-xl">
+    </div>
+    <div class="flex justify-end gap-2 mt-5">
+      <button id="job-cancel" class="px-4 py-2 rounded-xl border text-sm">Отмена</button>
+      <button id="job-create" class="px-4 py-2 rounded-xl bg-[#d97706] text-white text-sm">Запустить</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/jobs.js') }}"></script>
+{% endblock %}

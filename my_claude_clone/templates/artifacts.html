@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Артефакты — Claude Clone{% endblock %}
+{% block content %}
+<div class="h-screen overflow-y-auto">
+  <div class="max-w-5xl mx-auto px-6 lg:px-10 py-8">
+    <h1 class="text-2xl font-semibold text-stone-900">Артефакты</h1>
+    <p class="text-sm text-stone-500 mt-1 mb-6">Все сгенерированные код-блоки и документы</p>
+    <div id="artifacts-list" class="space-y-3"></div>
+    <div id="artifacts-empty" class="hidden text-center py-20 text-stone-500">Пока нет артефактов. Попросите Claude написать код.</div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/artifacts.js') }}"></script>
+{% endblock %}

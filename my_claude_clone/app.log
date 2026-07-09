@@ -1,0 +1,734 @@
+2026-07-08 11:16:48,709 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+2026-07-08 11:16:48,709 INFO werkzeug [33mPress CTRL+C to quit[0m
+2026-07-08 11:16:48,710 INFO werkzeug  * Restarting with stat
+2026-07-08 11:16:49,169 WARNING werkzeug  * Debugger is active!
+2026-07-08 11:16:49,183 INFO werkzeug  * Debugger PIN: 214-809-016
+2026-07-08 21:20:36,372 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.114.112:5000
+2026-07-08 21:20:36,375 INFO werkzeug [33mPress CTRL+C to quit[0m
+2026-07-08 21:20:36,381 INFO werkzeug  * Restarting with stat
+2026-07-08 21:20:40,359 WARNING werkzeug  * Debugger is active!
+2026-07-08 21:20:40,418 INFO werkzeug  * Debugger PIN: 546-270-892
+2026-07-08 21:20:51,742 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:20:51] "[32mGET / HTTP/1.1[0m" 302 -
+2026-07-08 21:20:51,828 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:20:51] "GET /login?next=/ HTTP/1.1" 200 -
+2026-07-08 21:21:07,276 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:07] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:21:07,304 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:07] "[32mGET / HTTP/1.1[0m" 302 -
+2026-07-08 21:21:07,334 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:07] "GET /login?next=/ HTTP/1.1" 200 -
+2026-07-08 21:21:11,741 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:11] "[32mPOST /login?next=/ HTTP/1.1[0m" 302 -
+2026-07-08 21:21:11,896 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:11] "GET / HTTP/1.1" 200 -
+2026-07-08 21:21:11,994 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:11] "GET /static/js/sidebar.js HTTP/1.1" 200 -
+2026-07-08 21:21:12,001 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:12] "GET /static/js/chat.js HTTP/1.1" 200 -
+2026-07-08 21:21:12,002 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:12] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-07-08 21:21:13,040 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:13] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:21:13,069 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:13] "GET /api/conversations/4/messages HTTP/1.1" 200 -
+2026-07-08 21:21:13,300 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:13] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:21:13,527 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:13] "GET / HTTP/1.1" 200 -
+2026-07-08 21:21:32,313 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:32] "GET /artifacts HTTP/1.1" 200 -
+2026-07-08 21:21:32,382 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:32] "GET /static/js/artifacts.js HTTP/1.1" 200 -
+2026-07-08 21:21:32,396 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:32] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:21:32,403 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:32] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:21:33,035 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:33] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:21:33,073 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:33] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:21:33,109 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:33] "GET /api/artifacts HTTP/1.1" 200 -
+2026-07-08 21:21:33,119 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:33] "GET / HTTP/1.1" 200 -
+2026-07-08 21:21:38,735 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:38] "[35m[1mPOST /api/conversations HTTP/1.1[0m" 201 -
+2026-07-08 21:21:38,836 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:38] "GET /?c=5 HTTP/1.1" 200 -
+2026-07-08 21:21:38,900 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:21:38,912 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:38] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:21:38,921 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:38] "[36mGET /static/js/chat.js HTTP/1.1[0m" 304 -
+2026-07-08 21:21:39,799 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:39] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:21:39,816 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:39] "GET /api/conversations/5/messages HTTP/1.1" 200 -
+2026-07-08 21:21:39,830 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:39] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:21:39,853 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:39] "GET / HTTP/1.1" 200 -
+2026-07-08 21:21:44,751 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:44] "GET /settings HTTP/1.1" 200 -
+2026-07-08 21:21:44,812 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:21:44,818 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:44] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:21:45,538 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:45] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:21:45,547 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:45] "GET /api/mcp-servers HTTP/1.1" 200 -
+2026-07-08 21:21:45,559 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:45] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:21:45,606 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:21:45] "GET / HTTP/1.1" 200 -
+2026-07-08 21:23:14,845 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:14] "[35m[1mPOST /api/mcp-servers HTTP/1.1[0m" 201 -
+2026-07-08 21:23:14,887 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:14] "GET /api/mcp-servers HTTP/1.1" 200 -
+2026-07-08 21:23:24,314 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:24] "[35m[1mPOST /api/conversations HTTP/1.1[0m" 201 -
+2026-07-08 21:23:24,423 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:24] "GET /?c=6 HTTP/1.1" 200 -
+2026-07-08 21:23:24,520 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:23:24,522 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:24] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:23:24,528 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:24] "[36mGET /static/js/chat.js HTTP/1.1[0m" 304 -
+2026-07-08 21:23:25,468 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:25] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:23:25,478 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:25] "GET /api/conversations/6/messages HTTP/1.1" 200 -
+2026-07-08 21:23:25,483 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:25] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:23:25,515 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:25] "GET / HTTP/1.1" 200 -
+2026-07-08 21:23:28,302 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 36, in chat
+    return self._mock_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 112, in _mock_chat
+    import { useState } from 'react';
+             ^^^^^^^^
+NameError: name 'useState' is not defined
+2026-07-08 21:23:28,405 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:28] "[35m[1mPOST /api/conversations/6/messages HTTP/1.1[0m" 500 -
+2026-07-08 21:23:40,672 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:40] "GET /settings HTTP/1.1" 200 -
+2026-07-08 21:23:40,745 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:40] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:23:40,762 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:40] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:23:41,503 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:41] "GET /api/mcp-servers HTTP/1.1" 200 -
+2026-07-08 21:23:41,518 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:41] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:23:41,537 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:41] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:23:41,708 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:41] "GET / HTTP/1.1" 200 -
+2026-07-08 21:23:52,799 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:52] "GET /settings HTTP/1.1" 200 -
+2026-07-08 21:23:52,870 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:23:52,878 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:52] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:23:53,586 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:53] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:23:53,595 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:53] "GET /api/mcp-servers HTTP/1.1" 200 -
+2026-07-08 21:23:53,618 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:53] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:23:53,651 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:23:53] "GET / HTTP/1.1" 200 -
+2026-07-08 21:25:28,546 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.114.112:5000
+2026-07-08 21:25:28,547 INFO werkzeug [33mPress CTRL+C to quit[0m
+2026-07-08 21:25:28,553 INFO werkzeug  * Restarting with stat
+2026-07-08 21:25:33,110 WARNING werkzeug  * Debugger is active!
+2026-07-08 21:25:33,166 INFO werkzeug  * Debugger PIN: 975-266-843
+2026-07-08 21:25:33,343 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:33] "GET /settings HTTP/1.1" 200 -
+2026-07-08 21:25:33,417 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:25:33,423 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:33] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:25:34,177 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:34] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:25:34,223 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:34] "GET /api/mcp-servers HTTP/1.1" 200 -
+2026-07-08 21:25:34,238 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:34] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:25:34,283 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:34] "GET / HTTP/1.1" 200 -
+2026-07-08 21:25:38,435 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:38] "GET / HTTP/1.1" 200 -
+2026-07-08 21:25:38,504 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:25:38,513 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:38] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:25:38,528 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:38] "[36mGET /static/js/chat.js HTTP/1.1[0m" 304 -
+2026-07-08 21:25:39,416 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:39] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:25:39,484 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:39] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:25:39,502 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:39] "GET / HTTP/1.1" 200 -
+2026-07-08 21:25:39,507 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:39] "GET /api/conversations/6/messages HTTP/1.1" 200 -
+2026-07-08 21:25:50,032 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:50] "POST /api/conversations/6/messages HTTP/1.1" 200 -
+2026-07-08 21:25:50,092 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:50] "GET /api/conversations/6/messages HTTP/1.1" 200 -
+2026-07-08 21:25:50,145 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:25:50] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:26:05,615 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:26:05] "POST /api/conversations/6/messages HTTP/1.1" 200 -
+2026-07-08 21:26:05,681 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:26:05] "GET /api/conversations/6/messages HTTP/1.1" 200 -
+2026-07-08 21:26:05,745 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:26:05] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:27:36,075 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.114.112:5000
+2026-07-08 21:27:36,076 INFO werkzeug [33mPress CTRL+C to quit[0m
+2026-07-08 21:27:36,080 INFO werkzeug  * Restarting with stat
+2026-07-08 21:27:40,130 WARNING werkzeug  * Debugger is active!
+2026-07-08 21:27:40,186 INFO werkzeug  * Debugger PIN: 742-861-803
+2026-07-08 21:27:41,111 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:41] "GET /projects HTTP/1.1" 200 -
+2026-07-08 21:27:41,253 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:41] "GET /static/js/projects.js HTTP/1.1" 200 -
+2026-07-08 21:27:41,260 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:41] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:27:41,273 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:27:42,665 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:42] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:27:42,736 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:42] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:27:42,754 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:42] "GET /api/projects HTTP/1.1" 200 -
+2026-07-08 21:27:42,790 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:42] "GET / HTTP/1.1" 200 -
+2026-07-08 21:27:52,766 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:52] "PUT /api/projects/1 HTTP/1.1" 200 -
+2026-07-08 21:27:52,820 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:27:52] "GET /api/projects HTTP/1.1" 200 -
+2026-07-08 21:28:04,307 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:04] "GET /code HTTP/1.1" 200 -
+2026-07-08 21:28:04,369 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:04] "GET /static/js/jobs.js HTTP/1.1" 200 -
+2026-07-08 21:28:04,384 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:28:04,390 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:04] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:28:05,153 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:05] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:28:05,212 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:05] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:28:05,215 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:05] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:05,219 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:05] "GET /api/mcp-servers HTTP/1.1" 200 -
+2026-07-08 21:28:05,245 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:05] "GET / HTTP/1.1" 200 -
+2026-07-08 21:28:09,122 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:09] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:11,641 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:11] "GET /api/jobs/1/status HTTP/1.1" 200 -
+2026-07-08 21:28:11,674 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:11] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:13,120 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:13] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:18,071 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:18] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:21,136 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:21] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:25,625 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:25] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:29,601 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:29] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:33,600 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:33] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:37,617 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:37] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:41,602 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:41] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:45,619 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:45] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:49,616 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:49] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:53,621 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:53] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:28:57,602 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:28:57] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:29:01,615 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:29:01] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:29:05,618 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:29:05] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:29:09,597 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:29:09] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:29:13,612 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:29:13] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:29:17,619 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:29:17] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:29:21,599 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:29:21] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:30:03,608 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:03] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:30:28,527 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:28] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:30:29,113 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:29] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:30:33,601 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:33] "GET /api/jobs HTTP/1.1" 200 -
+2026-07-08 21:30:35,573 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:35] "[35m[1mPOST /api/conversations HTTP/1.1[0m" 201 -
+2026-07-08 21:30:35,699 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:35] "GET /?c=7 HTTP/1.1" 200 -
+2026-07-08 21:30:35,783 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:35] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:30:35,796 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:35] "[36mGET /static/js/chat.js HTTP/1.1[0m" 304 -
+2026-07-08 21:30:35,798 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:35] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:30:37,162 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:37] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:30:37,173 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:37] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:30:37,190 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:37] "GET /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:30:37,605 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:37] "GET / HTTP/1.1" 200 -
+2026-07-08 21:30:39,856 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 36, in chat
+    return self._mock_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 112, in _mock_chat
+    import { useState } from 'react';
+             ^^^^^^^^
+NameError: name 'useState' is not defined
+2026-07-08 21:30:39,917 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:30:39] "[35m[1mPOST /api/conversations/7/messages HTTP/1.1[0m" 500 -
+2026-07-08 21:34:41,753 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.114.112:5000
+2026-07-08 21:34:41,755 INFO werkzeug [33mPress CTRL+C to quit[0m
+2026-07-08 21:34:41,760 INFO werkzeug  * Restarting with stat
+2026-07-08 21:34:45,671 WARNING werkzeug  * Debugger is active!
+2026-07-08 21:34:45,729 INFO werkzeug  * Debugger PIN: 646-028-966
+2026-07-08 21:34:49,111 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:49] "GET /?c=7 HTTP/1.1" 200 -
+2026-07-08 21:34:49,191 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-07-08 21:34:49,195 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:49] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
+2026-07-08 21:34:49,203 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:49] "[36mGET /static/js/chat.js HTTP/1.1[0m" 304 -
+2026-07-08 21:34:50,638 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:50] "[32mGET /favicon.ico HTTP/1.1[0m" 302 -
+2026-07-08 21:34:50,686 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:50] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:34:50,721 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:50] "GET /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:34:50,727 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:34:50] "GET / HTTP/1.1" 200 -
+2026-07-08 21:35:31,912 INFO openai._base_client Retrying request to /chat/completions in 0.495998 seconds
+2026-07-08 21:35:32,417 INFO openai._base_client Retrying request to /chat/completions in 0.778377 seconds
+2026-07-08 21:35:33,204 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1037, in request
+    response = self._send_request(
+        request,
+        stream=stream or self._should_stream_response_body(request=request),
+        **kwargs,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 440, in _send_request
+    return self._send_with_auth_retry(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 418, in _send_with_auth_retry
+    response = super()._send_request(request, stream=stream, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 964, in _send_request
+    return self._client.send(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 34, in chat
+    return self._groq_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 79, in _groq_chat
+    completion = client.chat.completions.create(
+        model=self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile",
+        messages=messages
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/resources/chat/completions/completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1072, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2026-07-08 21:35:33,441 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:35:33] "[35m[1mPOST /api/conversations/7/messages HTTP/1.1[0m" 500 -
+2026-07-08 21:35:43,612 INFO openai._base_client Retrying request to /chat/completions in 0.410676 seconds
+2026-07-08 21:35:44,039 INFO openai._base_client Retrying request to /chat/completions in 0.784601 seconds
+2026-07-08 21:35:44,841 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1037, in request
+    response = self._send_request(
+        request,
+        stream=stream or self._should_stream_response_body(request=request),
+        **kwargs,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 440, in _send_request
+    return self._send_with_auth_retry(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 418, in _send_with_auth_retry
+    response = super()._send_request(request, stream=stream, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 964, in _send_request
+    return self._client.send(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 34, in chat
+    return self._groq_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 79, in _groq_chat
+    completion = client.chat.completions.create(
+        model=self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile",
+        messages=messages
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/resources/chat/completions/completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1072, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2026-07-08 21:35:44,966 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:35:44] "POST /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:35:45,033 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:35:45] "GET /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:35:45,096 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:35:45] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:36:14,815 INFO openai._base_client Retrying request to /chat/completions in 0.447854 seconds
+2026-07-08 21:36:15,276 INFO openai._base_client Retrying request to /chat/completions in 0.998031 seconds
+2026-07-08 21:36:16,289 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1037, in request
+    response = self._send_request(
+        request,
+        stream=stream or self._should_stream_response_body(request=request),
+        **kwargs,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 440, in _send_request
+    return self._send_with_auth_retry(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 418, in _send_with_auth_retry
+    response = super()._send_request(request, stream=stream, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 964, in _send_request
+    return self._client.send(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 34, in chat
+    return self._groq_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 79, in _groq_chat
+    completion = client.chat.completions.create(
+        model=self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile",
+        messages=messages
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/resources/chat/completions/completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1072, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2026-07-08 21:36:16,464 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:36:16] "[35m[1mPOST /api/conversations/7/messages HTTP/1.1[0m" 500 -
+2026-07-08 21:36:51,008 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.114.112:5000
+2026-07-08 21:36:51,009 INFO werkzeug [33mPress CTRL+C to quit[0m
+2026-07-08 21:36:51,015 INFO werkzeug  * Restarting with stat
+2026-07-08 21:36:54,988 WARNING werkzeug  * Debugger is active!
+2026-07-08 21:36:55,041 INFO werkzeug  * Debugger PIN: 481-736-189
+2026-07-08 21:37:11,993 INFO openai._base_client Retrying request to /chat/completions in 0.402329 seconds
+2026-07-08 21:37:12,412 INFO openai._base_client Retrying request to /chat/completions in 0.978639 seconds
+2026-07-08 21:37:13,407 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1037, in request
+    response = self._send_request(
+        request,
+        stream=stream or self._should_stream_response_body(request=request),
+        **kwargs,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 440, in _send_request
+    return self._send_with_auth_retry(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 418, in _send_with_auth_retry
+    response = super()._send_request(request, stream=stream, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 964, in _send_request
+    return self._client.send(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 34, in chat
+    return self._groq_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 79, in _groq_chat
+    completion = client.chat.completions.create(
+        model=self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile",
+        messages=messages
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/resources/chat/completions/completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1072, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2026-07-08 21:37:13,555 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:37:13] "POST /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:37:13,653 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:37:13] "GET /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:37:13,769 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:37:13] "GET /api/conversations HTTP/1.1" 200 -
+2026-07-08 21:37:27,388 INFO openai._base_client Retrying request to /chat/completions in 0.417502 seconds
+2026-07-08 21:37:27,820 INFO openai._base_client Retrying request to /chat/completions in 0.969645 seconds
+2026-07-08 21:37:28,806 ERROR services.ai_client AI chat error
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1037, in request
+    response = self._send_request(
+        request,
+        stream=stream or self._should_stream_response_body(request=request),
+        **kwargs,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 440, in _send_request
+    return self._send_with_auth_retry(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_client.py", line 418, in _send_with_auth_retry
+    response = super()._send_request(request, stream=stream, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 964, in _send_request
+    return self._client.send(request, stream=stream, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 7] No address associated with hostname
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 34, in chat
+    return self._groq_chat(messages)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/data/data/com.termux/files/home/ai-agent/my_claude_clone/services/ai_client.py", line 79, in _groq_chat
+    completion = client.chat.completions.create(
+        model=self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile",
+        messages=messages
+    )
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/resources/chat/completions/completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/site-packages/openai/_base_client.py", line 1072, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2026-07-08 21:37:28,912 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:37:28] "POST /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:37:29,010 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:37:29] "GET /api/conversations/7/messages HTTP/1.1" 200 -
+2026-07-08 21:37:29,101 INFO werkzeug 127.0.0.1 - - [08/Jul/2026 21:37:29] "GET /api/conversations HTTP/1.1" 200 -

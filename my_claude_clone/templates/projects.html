@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Проекты — Claude Clone{% endblock %}
+{% block content %}
+<div class="h-screen overflow-y-auto">
+  <div class="max-w-5xl mx-auto px-6 lg:px-10 py-8">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-semibold text-stone-900">Проекты</h1>
+        <p class="text-sm text-stone-500 mt-1">Группируйте чаты, знания и инструкции</p>
+      </div>
+      <button id="new-project-btn" class="px-4 py-2 rounded-xl bg-[#d97706] text-white text-sm font-medium hover:bg-[#b45309]">+ Новый проект</button>
+    </div>
+
+    <div id="projects-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- JS -->
+    </div>
+
+    <div id="projects-empty" class="hidden text-center py-20 text-stone-500">
+      Нет проектов. Создайте первый.
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="project-modal" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+    <h3 class="text-lg font-semibold mb-4" id="project-modal-title">Новый проект</h3>
+    <input id="project-name" placeholder="Название проекта" class="w-full mb-3 px-3 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/30">
+    <textarea id="project-desc" placeholder="Описание (опционально)" class="w-full px-3 py-2.5 border rounded-xl h-24 focus:outline-none focus:ring-2 focus:ring-amber-500/30"></textarea>
+    <div class="flex justify-end gap-2 mt-4">
+      <button id="project-cancel" class="px-4 py-2 rounded-xl border text-sm">Отмена</button>
+      <button id="project-save" class="px-4 py-2 rounded-xl bg-[#d97706] text-white text-sm">Сохранить</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Claude Clone{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            claude: {
+              bg: '#f8fafc',
+              accent: '#d97706',
+              accentHover: '#b45309',
+              sidebar: '#f1ede7',
+              border: '#e5e3dc'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-claude-bg font-sans text-stone-800 antialiased h-screen overflow-hidden">
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-[260px] bg-[#faf8f5] border-r border-claude-border flex flex-col fixed lg:relative z-30 h-full -translate-x-full lg:translate-x-0 transition-transform">
+    <div class="p-4 flex items-center gap-2 border-b border-claude-border">
+      <div class="w-8 h-8 rounded-lg bg-stone-800 flex items-center justify-center text-white font-bold text-sm">*</div>
+      <span class="font-semibold text-stone-900">claude</span>
+      <span class="ml-auto text-xs text-stone-500">clone</span>
+    </div>
+
+    <div class="p-3">
+      <button id="new-chat-btn" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl bg-claude-accent text-white hover:bg-claude-accentHover transition font-medium text-sm shadow-sm">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Новый чат
+      </button>
+    </div>
+
+    <nav class="px-3 pb-2 space-y-1 text-sm">
+      <a href="{{ url_for('main.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-stone-200/60 {% if request.endpoint=='main.dashboard' %}bg-stone-200/80 font-medium{% endif %}">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Чаты
+      </a>
+      <a href="{{ url_for('main.projects') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-stone-200/60 {% if request.endpoint=='main.projects' %}bg-stone-200/80 font-medium{% endif %}">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Проекты
+      </a>
+      <a href="{{ url_for('main.artifacts') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-stone-200/60 {% if request.endpoint=='main.artifacts' %}bg-stone-200/80 font-medium{% endif %}">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+        Артефакты
+      </a>
+      <a href="{{ url_for('main.code') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-stone-200/60 {% if request.endpoint=='main.code' %}bg-stone-200/80 font-medium{% endif %}">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Код
+        <span class="ml-auto text-[10px] bg-stone-800 text-white px-1.5 py-0.5 rounded">beta</span>
+      </a>
+    </nav>
+
+    <div class="px-3 pt-2">
+      <input id="chat-search" type="text" placeholder="Поиск чатов..." class="w-full px-3 py-2 text-sm bg-white border border-claude-border rounded-xl focus:outline-none focus:ring-2 focus:ring-claude-accent/30">
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-3 py-3" id="recent-chats">
+      <div class="text-[11px] uppercase tracking-wider text-stone-500 px-2 mb-2">Недавние</div>
+      <div id="sidebar-conversations" class="space-y-1 text-sm">
+        <!-- JS inject -->
+        <div class="text-stone-400 text-xs px-2">Загрузка...</div>
+      </div>
+    </div>
+
+    <div class="border-t border-claude-border p-3">
+      <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-stone-200/60">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-amber-600 text-white flex items-center justify-center text-sm font-semibold">
+          {{ current_user.username[0]|upper if current_user.is_authenticated else 'D' }}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium truncate">{{ current_user.username if current_user.is_authenticated else 'demo' }}</div>
+          <div class="text-xs text-stone-500 truncate">{{ current_user.email if current_user.is_authenticated else 'demo@claude.com' }}</div>
+        </div>
+        <div class="relative">
+          <button id="user-menu-btn" class="p-1 rounded-lg hover:bg-stone-300/50">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.5"/><circle cx="19.5" cy="12" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/></svg>
+          </button>
+          <div id="user-menu" class="hidden absolute bottom-10 right-0 bg-white rounded-2xl shadow-xl border border-stone-200 w-44 py-1 text-sm">
+            <a href="{{ url_for('main.settings') }}" class="block px-3 py-2 hover:bg-stone-50">Настройки</a>
+            <a href="{{ url_for('auth.logout') }}" class="block px-3 py-2 hover:bg-stone-50 text-red-600">Выйти</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="flex-1 flex min-w-0 relative">
+    <button id="mobile-menu-btn" class="lg:hidden absolute top-4 left-4 z-20 bg-white p-2 rounded-xl shadow border">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <main class="flex-1 flex flex-col min-w-0 bg-claude-bg">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Artifact Panel -->
+    <aside id="artifact-panel" class="hidden w-[460px] xl:w-[520px] border-l border-claude-border bg-white flex-col">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-stone-200">
+        <div>
+          <div class="text-sm font-semibold" id="artifact-title">Артефакт</div>
+          <div class="text-xs text-stone-500" id="artifact-lang">preview</div>
+        </div>
+        <div class="flex gap-2">
+          <button id="artifact-copy" class="text-xs px-3 py-1.5 rounded-lg border hover:bg-stone-50">Копировать</button>
+          <button id="artifact-close" class="p-1.5 rounded-lg hover:bg-stone-100">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="flex-1 overflow-auto">
+        <pre id="artifact-content" class="p-4 text-[13px] leading-relaxed font-mono whitespace-pre-wrap"></pre>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
