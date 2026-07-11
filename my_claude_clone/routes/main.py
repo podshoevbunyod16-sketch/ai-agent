@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
-from models import Conversation, Artifact, Job
+from models import Conversation, Artifact, Job, MCPServer
 
 main_bp = Blueprint('main', __name__)
 
@@ -12,8 +12,9 @@ def dashboard():
     if conv_id:
         conversation = Conversation.query.filter_by(id=conv_id, user_id=current_user.id).first()
     if not conversation:
-        # последний активный
-        conversation = Conversation.query.filter_by(user_id=current_user.id, is_archived=False).order_by(Conversation.updated_at.desc()).first()
+        conversation = Conversation.query.filter_by(
+            user_id=current_user.id, is_archived=False
+        ).order_by(Conversation.updated_at.desc()).first()
     return render_template('dashboard.html', active_conversation=conversation)
 
 @main_bp.route('/projects')
@@ -35,3 +36,9 @@ def code():
 @login_required
 def settings():
     return render_template('settings.html')
+
+@main_bp.route('/mcp-settings')
+@login_required
+def mcp_settings():
+    servers = MCPServer.query.filter_by(is_active=True).all()
+    return render_template('mcp_settings.html', servers=servers)
