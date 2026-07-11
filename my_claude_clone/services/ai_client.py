@@ -1,33 +1,24 @@
-import os
-import re
-import json
-import logging
+import os, re, json, logging
 from config import Config
 
 logger = logging.getLogger(__name__)
 
 
 def extract_artifacts(text):
-    """Извлекает блоки кода ```lang ... ```"""
-    pattern = r'```(\w+)?\n(.*?)```'
-    matches = re.findall(pattern, text, re.DOTALL)
-    artifacts = []
-    for lang, code in matches:
-        artifacts.append({
-            'language': lang.strip() if lang else 'text',
-            'content': code.strip(),
-            'title': f"{lang or 'code'} snippet"
-        })
-    return artifacts
+    pattern = r'```(\w+)?\n([\s\S]*?)```'
+    out = []
+    for lang, code in re.findall(pattern, text):
+        out.append({'language': lang.strip() or 'text', 'content': code.strip(),
+                    'title': f'{lang or "code"} snippet'})
+    return out
 
 
 class AIClient:
     def __init__(self):
         self.provider = Config.AI_PROVIDER
-        self.model = Config.AI_MODEL
+        self.model    = Config.AI_MODEL
 
     def chat(self, messages, extended_thinking=False):
-        """messages: list of dict {role, content}"""
         try:
             if self.provider == 'anthropic' and Config.ANTHROPIC_API_KEY:
                 return self._anthropic_chat(messages, extended_thinking)
@@ -38,169 +29,81 @@ class AIClient:
             else:
                 return self._mock_chat(messages)
         except Exception as e:
-            logger.exception("AI chat error")
-            return f"Ошибка AI провайдера: {str(e)}\n\n[Mock fallback]\n{self._mock_chat(messages)}"
+            logger.exception('AI chat error')
+            return f'Ошибка AI: {str(e)}'
 
     def chat_stream(self, messages, tools=None, tool_executor=None):
-        """
-        Потоковая генерация ответа (генератор, отдаёт куски текста по мере готовности).
-
-        Если переданы tools (MCP-инструменты в формате OpenAI function calling) —
-        сначала выполняется цикл вызова инструментов (не потоково, максимум 4 итерации),
-        а уже финальный текстовый ответ пользователю стримится по кусочкам.
-
-        tool_executor(tool_name, arguments_dict) -> str   — функция вызова MCP-инструмента.
-        """
+        # SSE generator: yields text tokens or JSON event strings
         try:
             if self.provider == 'groq' and Config.GROQ_API_KEY:
                 yield from self._groq_chat_stream(messages, tools, tool_executor)
             else:
-                answer = self.chat(messages)
-                yield answer
+                yield self.chat(messages)
         except Exception as e:
-            logger.exception("AI stream error")
-            yield f"\n\n⚠️ Ошибка AI провайдера: {str(e)}"
+            logger.exception('AI stream error')
+            yield f'Ошибка: {str(e)}'
 
     def _anthropic_chat(self, messages, extended_thinking=False):
         from anthropic import Anthropic
         client = Anthropic(api_key=Config.ANTHROPIC_API_KEY)
-        system_msg = ""
-        chat_msgs = []
+        system_msg, chat_msgs = '', []
         for m in messages:
-            if m['role'] == 'system':
-                system_msg = m['content']
-            else:
-                chat_msgs.append({"role": m['role'], "content": m['content']})
-        resp = client.messages.create(
-            model=self.model if 'claude' in self.model else "claude-3-5-sonnet-20241022",
-            max_tokens=2048,
-            system=system_msg or "Ты Claude, полезный AI-ассистент от Anthropic.",
-            messages=chat_msgs
-        )
-        return resp.content[0].text
+            if m['role'] == 'system': system_msg = m['content']
+            else: chat_msgs.append({'role': m['role'], 'content': m['content']})
+        kwargs = dict(
+            model='claude-3-5-sonnet-20241022' if 'claude' not in self.model else self.model,
+            max_tokens=2048, system=system_msg or 'Ты полезный AI-ассистент.',
+            messages=chat_msgs)
+        if extended_thinking:
+            kwargs['thinking'] = {'type': 'enabled', 'budget_tokens': 5000}
+        return client.messages.create(**kwargs).content[0].text
 
     def _openrouter_chat(self, messages):
         from openai import OpenAI
-        client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=Config.OPENROUTER_API_KEY,
-        )
-        completion = client.chat.completions.create(
-            model=self.model if '/' in self.model else "anthropic/claude-3.5-sonnet",
-            messages=messages,
-            temperature=0.7,
-        )
-        return completion.choices[0].message.content
+        client = OpenAI(base_url='https://openrouter.ai/api/v1', api_key=Config.OPENROUTER_API_KEY)
+        return client.chat.completions.create(
+            model=self.model if '/' in self.model else 'anthropic/claude-3.5-sonnet',
+            messages=messages, temperature=0.7).choices[0].message.content
 
     def _groq_chat(self, messages):
         from openai import OpenAI
-        client = OpenAI(
-            api_key=Config.GROQ_API_KEY,
-            base_url="https://api.groq.com/openai/v1"
-        )
-        completion = client.chat.completions.create(
-            model=self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile",
-            messages=messages
-        )
-        return completion.choices[0].message.content
+        client = OpenAI(api_key=Config.GROQ_API_KEY, base_url='https://api.groq.com/openai/v1')
+        model_name = self.model if ('llama' in self.model or 'mixtral' in self.model) else 'llama-3.3-70b-versatile'
+        return client.chat.completions.create(model=model_name, messages=messages).choices[0].message.content
 
     def _groq_chat_stream(self, messages, tools=None, tool_executor=None):
         from openai import OpenAI
-        client = OpenAI(
-            api_key=Config.GROQ_API_KEY,
-            base_url="https://api.groq.com/openai/v1"
-        )
-        model_name = self.model if 'llama' in self.model or 'mixtral' in self.model else "llama-3.3-70b-versatile"
-        work_messages = list(messages)
-
+        client = OpenAI(api_key=Config.GROQ_API_KEY, base_url='https://api.groq.com/openai/v1')
+        model_name = self.model if ('llama' in self.model or 'mixtral' in self.model) else 'llama-3.3-70b-versatile'
+        work = list(messages)
         if tools:
-            tool_check = client.chat.completions.create(
-                model=model_name,
-                messages=work_messages,
-                tools=tools,
-                tool_choice="auto",
-                max_tokens=1024,
-            )
-            choice = tool_check.choices[0]
-            tool_calls = getattr(choice.message, 'tool_calls', None)
-
-            loop_count = 0
-            while tool_calls and loop_count < 4:
-                loop_count += 1
-                work_messages.append({
-                    "role": "assistant",
-                    "content": choice.message.content or "",
-                    "tool_calls": [
-                        {
-                            "id": tc.id,
-                            "type": "function",
-                            "function": {"name": tc.function.name, "arguments": tc.function.arguments}
-                        } for tc in tool_calls
-                    ]
-                })
-                for tc in tool_calls:
-                    try:
-                        args = json.loads(tc.function.arguments or "{}")
-                    except json.JSONDecodeError:
-                        args = {}
-                    result_text = tool_executor(tc.function.name, args) if tool_executor else "Инструмент недоступен"
-                    work_messages.append({
-                        "role": "tool",
-                        "tool_call_id": tc.id,
-                        "content": str(result_text)[:4000]
-                    })
-                tool_check = client.chat.completions.create(
-                    model=model_name,
-                    messages=work_messages,
-                    tools=tools,
-                    tool_choice="auto",
-                    max_tokens=1024,
-                )
-                choice = tool_check.choices[0]
-                tool_calls = getattr(choice.message, 'tool_calls', None)
-
-        stream = client.chat.completions.create(
-            model=model_name,
-            messages=work_messages,
-            stream=True,
-        )
+            for _ in range(4):
+                check = client.chat.completions.create(
+                    model=model_name, messages=work, tools=tools, tool_choice='auto', max_tokens=1024)
+                choice = check.choices[0]
+                tcs = getattr(choice.message, 'tool_calls', None)
+                if not tcs: break
+                for tc in tcs:
+                    yield json.dumps({'event': 'tool_start', 'name': tc.function.name}) + '\n'
+                work.append({'role': 'assistant', 'content': choice.message.content or '',
+                    'tool_calls': [{'id': tc.id, 'type': 'function',
+                    'function': {'name': tc.function.name, 'arguments': tc.function.arguments}}
+                    for tc in tcs]})
+                for tc in tcs:
+                    try:    args = json.loads(tc.function.arguments or '{}')
+                    except: args = {}
+                    result = tool_executor(tc.function.name, args) if tool_executor else 'Инструмент недоступен'
+                    yield json.dumps({'event': 'tool_done', 'name': tc.function.name, 'result': str(result)[:300]}) + '\n'
+                    work.append({'role': 'tool', 'tool_call_id': tc.id, 'content': str(result)[:4000]})
+        stream = client.chat.completions.create(model=model_name, messages=work, stream=True)
         for chunk in stream:
-            delta = chunk.choices[0].delta
-            if delta and delta.content:
-                yield delta.content
+            d = chunk.choices[0].delta
+            if d and d.content: yield d.content
+        yield json.dumps({'event': 'done'}) + '\n'
 
     def _mock_chat(self, messages):
-        last_user = next((m['content'] for m in reversed(messages) if m['role'] == 'user'), 'Привет')
-        if any(k in last_user.lower() for k in ['код', 'code', 'python', 'react', 'html', 'функци', 'скрипт', 'artifact', 'артефакт']):
-            return f"""Отлично, вот решение для: "{last_user[:80]}"
-
-Я создал артефакт согласно вашей задаче, где вы можете его отредактировать.
-
-```python
-# Claude Code Artifact
-def solve_problem(input_data):
-    \"\"\"Умное решение от Claude\"\"\"
-    print("Обработка:", input_data)
-    result = {{
-        "status": "success",
-        "processed": input_data.upper(),
-        "tokens": len(input_data.split())
-    }}
-    return result
-
-if __name__ == "__main__":
-    print(solve_problem("{last_user[:30]}"))
-```
-"""
-        return f"""Привет! Я Claude Clone — ваш AI-ассистент.
-
-Вы спросили: "{last_user}"
-
-Вот мой ответ в стиле Claude:
-
-- Я могу помочь с кодом, анализом, поиском
-- Артефакты автоматически создаются из кода
-- Подключайте MCP-серверы и Claude Code Jobs"""
+        last = next((m['content'] for m in reversed(messages) if m['role'] == 'user'), 'Привет')
+        return f'Mock ответ на: "{last[:60]}"\n\nВключи реальный ИИ в .env:\n  AI_PROVIDER=groq\n  GROQ_API_KEY=your_key'
 
 
 ai_client = AIClient()
