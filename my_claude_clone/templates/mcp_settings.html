@@ -4,15 +4,21 @@
 <div class="h-screen overflow-y-auto">
 <div class="max-w-3xl mx-auto px-6 py-8">
   <h1 class="text-3xl font-bold mb-1">🛠️ MCP Серверы</h1>
-  <p class="text-stone-500 mb-8">Подключай серверы MCP — Claude будет использовать их инструменты прямо в чате.</p>
+  <p class="text-stone-500 mb-6">Подключай серверы MCP — Claude будет использовать их инструменты прямо в чате.</p>
+
+  <!-- Встроенные инструменты -->
+  <div class="bg-gradient-to-br from-amber-50 to-stone-50 rounded-2xl border border-amber-200 p-5 mb-6">
+    <h2 class="font-semibold text-stone-800 mb-3">✨ Встроенные инструменты (8 штук)</h2>
+    <div class="grid grid-cols-2 gap-2" id="builtin-tools"></div>
+  </div>
 
   <!-- Добавить -->
   <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 mb-6">
-    <h2 class="font-semibold text-stone-800 mb-4">Добавить сервер</h2>
+    <h2 class="font-semibold text-stone-800 mb-4">➕ Добавить внешний MCP сервер</h2>
     <div class="space-y-3">
       <div class="grid sm:grid-cols-2 gap-3">
-        <input id="add-name"  placeholder="Имя (например, GitHub MCP)" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
-        <input id="add-url"   placeholder="https://..." class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
+        <input id="add-name"  placeholder="Имя (например, Composio MCP)" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
+        <input id="add-url"   placeholder="https://connect.composio.dev/mcp" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
       </div>
       <input id="add-token" placeholder="Auth Token (если нужен)" type="password"
              class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
@@ -22,7 +28,8 @@
     </div>
   </div>
 
-  <!-- Список -->
+  <!-- Список внешних MCP -->
+  <h2 class="font-semibold text-stone-800 mb-3">🔌 Внешние MCP серверы</h2>
   <div id="servers-list" class="space-y-3">
     <div class="text-stone-400 text-sm">Загрузка...</div>
   </div>
@@ -31,12 +38,32 @@
 {% endblock %}
 {% block scripts %}
 <script>
+// Встроенные инструменты отрисовываем сразу
+const BUILTIN = [
+  {name:'web_search',     desc:'🔍 Поиск в интернете через Google'},
+  {name:'fetch_url',      desc:'🌐 Чтение любого сайта по ссылке'},
+  {name:'code_execution', desc:'💻 Анализ и объяснение кода'},
+  {name:'extract_artifacts', desc:'📄 Извлечение артефактов'},
+  {name:'extended_thinking', desc:'🧠 Расширенное мышление'},
+  {name:'agent_mode',     desc:'🤖 Автоматический агентный режим'},
+  {name:'image_analysis', desc:'🖼️ Анализ изображений'},
+  {name:'file_management',desc:'📁 Управление файлами'},
+];
+
+document.getElementById('builtin-tools').innerHTML = BUILTIN.map(t=>`
+  <div class="flex items-start gap-2 bg-white rounded-xl border border-amber-100 px-3 py-2">
+    <div class="text-sm">
+      <div class="font-medium text-stone-800">${t.name}</div>
+      <div class="text-xs text-stone-500 mt-0.5">${t.desc}</div>
+    </div>
+  </div>`).join('');
+
 async function loadServers(){
   const list = document.getElementById('servers-list');
   const r = await fetch('/api/mcp-servers');
   const servers = await r.json();
   if(!servers.length){
-    list.innerHTML = '<div class="text-stone-400 text-sm">Серверов нет. Добавь первый!</div>';
+    list.innerHTML = '<div class="text-stone-400 text-sm">Внешних серверов нет. Добавь первый!</div>';
     return;
   }
   list.innerHTML = servers.map(s=>`
@@ -47,38 +74,64 @@ async function loadServers(){
             <span class="w-2 h-2 bg-stone-300 rounded-full" id="dot-${s.id}"></span>
             <h3 class="font-semibold text-stone-900">${s.name}</h3>
           </div>
-          <p class="text-xs text-stone-500 mt-1 break-all">${s.url}</p>
-          <div id="tools-${s.id}" class="mt-3 text-xs text-stone-500"></div>
+          <p class="text-xs text-stone-500 mt-0.5 break-all">${s.url}</p>
+          <div id="tools-${s.id}" class="mt-3"></div>
         </div>
         <div class="flex gap-2 shrink-0">
-          <button onclick="testServer(${s.id})" class="px-3 py-1.5 text-xs rounded-lg border border-stone-200 hover:bg-stone-50">🔗 Проверить</button>
+          <button onclick="testServer(${s.id})" id="test-btn-${s.id}" class="px-3 py-1.5 text-xs rounded-lg border border-stone-200 hover:bg-stone-50">🔗 Проверить</button>
           <button onclick="delServer(${s.id})"  class="px-3 py-1.5 text-xs rounded-lg border border-red-200 text-red-600 hover:bg-red-50">✕</button>
         </div>
       </div>
     </div>`).join('');
-  servers.forEach(s=>loadTools(s.id));
+  // Автоматически загружаем инструменты при открытии страницы
+  servers.forEach(s => loadTools(s.id));
 }
 
 async function loadTools(id){
+  const el  = document.getElementById('tools-'+id);
+  const dot = document.getElementById('dot-'+id);
+  el.innerHTML = '<span class="text-xs text-stone-400">Загрузка инструментов...</span>';
   try{
     const d = await(await fetch('/api/mcp-servers/'+id+'/tools')).json();
-    const el = document.getElementById('tools-'+id);
     if(d.tools && d.tools.length){
-      document.getElementById('dot-'+id).className='w-2 h-2 bg-emerald-400 rounded-full';
-      el.innerHTML='<b class="text-stone-700">Инструменты:</b> '+
-        d.tools.map(t=>`<span class="inline-block bg-stone-100 rounded px-1.5 py-0.5 mr-1 mt-1">${t.name||t}</span>`).join('');
-    } else if(d.error){
-      el.innerHTML=`<span class="text-red-400">⚠ ${d.error}</span>`;
+      dot.className = 'w-2 h-2 bg-emerald-400 rounded-full';
+      el.innerHTML = `
+        <div class="text-xs font-medium text-stone-600 mb-1">Инструментов: ${d.tools.length}</div>
+        <div class="flex flex-wrap gap-1">
+          ${d.tools.map(t=>{
+            const name = typeof t === 'string' ? t : t.name;
+            const desc = typeof t === 'object' ? (t.description||'') : '';
+            return `<span title="${desc}" class="inline-block bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg px-2 py-0.5 text-xs">${name}</span>`;
+          }).join('')}
+        </div>`;
+    } else {
+      dot.className = 'w-2 h-2 bg-red-400 rounded-full';
+      el.innerHTML = `<span class="text-xs text-red-500">⚠️ Инструменты не обнаружены — ${d.error||'проверь URL или токен'}</span>`;
     }
-  }catch(e){}
+  }catch(e){
+    dot.className = 'w-2 h-2 bg-red-400 rounded-full';
+    el.innerHTML = `<span class="text-xs text-red-500">❌ Ошибка: ${e}</span>`;
+  }
 }
 
 async function testServer(id){
-  const btn=event.target; btn.disabled=true; btn.textContent='...';
+  const btn = document.getElementById('test-btn-'+id);
+  btn.disabled = true; btn.textContent = 'Тестирую...';
   try{
-    const d=await(await fetch('/api/mcp-servers/'+id+'/test',{method:'POST'})).json();
-    alert(d.message);
-    if(d.success) document.getElementById('dot-'+id).className='w-2 h-2 bg-emerald-400 rounded-full';
+    const d = await(await fetch('/api/mcp-servers/'+id+'/test',{method:'POST'})).json();
+    if(d.success){
+      document.getElementById('dot-'+id).className = 'w-2 h-2 bg-emerald-400 rounded-full';
+      if(d.tools && d.tools.length){
+        const el = document.getElementById('tools-'+id);
+        el.innerHTML = `<div class="text-xs font-medium text-stone-600 mb-1">✅ ${d.message}</div><div class="flex flex-wrap gap-1">${d.tools.map(t=>{
+          const name = typeof t==='string'?t:t.name;
+          return `<span class="inline-block bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg px-2 py-0.5 text-xs">${name}</span>`;
+        }).join('')}</div>`;
+      } else { alert(d.message); }
+    } else {
+      document.getElementById('dot-'+id).className = 'w-2 h-2 bg-red-400 rounded-full';
+      alert(d.message);
+    }
   }catch(e){alert('Ошибка: '+e);}
   finally{btn.disabled=false; btn.textContent='🔗 Проверить';}
 }
@@ -87,17 +140,21 @@ async function delServer(id){
   if(!confirm('Удалить сервер?')) return;
   await fetch('/api/mcp-servers/'+id,{method:'DELETE'});
   document.getElementById('srv-'+id)?.remove();
+  if(!document.querySelector('[id^="srv-"]'))
+    document.getElementById('servers-list').innerHTML='<div class="text-stone-400 text-sm">Внешних серверов нет. Добавь первый!</div>';
 }
 
-document.getElementById('btn-add').onclick=async function(){
+document.getElementById('btn-add').onclick = async function(){
   const name  = document.getElementById('add-name').value.trim();
   const url   = document.getElementById('add-url').value.trim();
   const token = document.getElementById('add-token').value.trim();
   if(!name||!url){alert('Введи имя и URL'); return;}
+  const btn = this; btn.disabled=true; btn.textContent='Добавляю...';
   await fetch('/api/mcp-servers',{method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({name,url,auth_token:token})});
   ['add-name','add-url','add-token'].forEach(id=>document.getElementById(id).value='');
+  btn.disabled=false; btn.textContent='+ Добавить';
   loadServers();
 };
 
