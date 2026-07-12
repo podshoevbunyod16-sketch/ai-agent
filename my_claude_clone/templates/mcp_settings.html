@@ -7,7 +7,7 @@
   <h1 class="text-3xl font-bold mb-1">🛠️ MCP Серверы</h1>
   <p class="text-stone-500 mb-6">Подключай серверы MCP — Claude будет использовать их инструменты прямо в чате.</p>
 
-  <!-- Встроенные инструменты -->
+  <!-- Встроенные -->
   <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-5 mb-6">
     <h2 class="font-semibold text-stone-800 mb-3">✨ Встроенные инструменты (8 штук)</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -22,41 +22,37 @@
     </div>
   </div>
 
-  <!-- Инструкция по Composio -->
+  <!-- Инструкция Composio -->
   <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-6">
-    <h2 class="font-semibold text-blue-900 mb-2">💡 Как подключить Composio MCP?</h2>
-    <ol class="text-sm text-blue-800 space-y-2 list-decimal pl-4">
-      <li>Открой <a href="https://app.composio.dev" class="underline font-medium">app.composio.dev</a> → войди / зарегистрируйся</li>
-      <li>Перейди в <b>Settings → API Keys</b> → скопируй свой ключ</li>
-      <li>URL сервера: <code class="bg-blue-100 px-1 rounded text-xs">https://mcp.composio.dev/composio/mcp/YOUR_API_KEY/sse</code></li>
-      <li>Поле имя: <b>Composio MCP</b>, URL — твой персональный URL, Auth Token — оставь пустым</li>
-    </ol>
-    <div class="mt-3 p-3 bg-white rounded-xl border border-blue-100 text-xs text-stone-600">
-      <b>Важно:</b> URL <code>https://connect.composio.dev/mcp</code> — есть общий адрес. Тебе нужен персональный URL с твоим ключом — иначе 403 Ошибка.
+    <h2 class="font-semibold text-blue-900 mb-2">💡 Правильный URL для Composio MCP</h2>
+    <p class="text-sm text-blue-800 mb-3">Твой URL перенаправляется (301) на новый адрес. Используй прямо правильный:</p>
+    <div class="bg-white rounded-xl border border-blue-100 p-3 font-mono text-xs text-stone-700 break-all mb-3">
+      https://composio.dev/toolkits/composio/mcp/<b>ТВОЙ_API_КЛЮЧ</b>/sse
     </div>
+    <ol class="text-sm text-blue-800 space-y-1 list-decimal pl-4">
+      <li>Открой <a href="https://app.composio.dev" target="_blank" class="underline font-medium">app.composio.dev</a> → Settings → API Keys</li>
+      <li>Скопируй свой ключ (ak_...)</li>
+      <li>Вставь в URL вместо ТВОЙ_API_КЛЮЧ</li>
+      <li>Добавь сервер ниже (поле Auth Token оставь пустым)</li>
+    </ol>
   </div>
 
   <!-- Форма добавления -->
   <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 mb-6">
-    <h2 class="font-semibold text-stone-800 mb-4">➕ Добавить внешний MCP сервер</h2>
+    <h2 class="font-semibold text-stone-800 mb-4">➕ Добавить MCP сервер</h2>
     <div class="space-y-3">
       <div class="grid sm:grid-cols-2 gap-3">
-        <input id="add-name"  placeholder="Имя (напр., Composio MCP)" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
-        <input id="add-url"   placeholder="https://mcp.composio.dev/composio/mcp/KEY/sse" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
+        <input id="add-name" placeholder="Имя" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
+        <input id="add-url" placeholder="https://composio.dev/toolkits/composio/mcp/KEY/sse" class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
       </div>
-      <input id="add-token" placeholder="Auth Token (для Composio не нужен — ключ уже в URL)" type="password"
+      <input id="add-token" placeholder="Auth Token (для Composio не нужен)" type="password"
              class="w-full px-3 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
-      <button id="btn-add" class="px-5 py-2 bg-stone-800 text-white rounded-xl text-sm hover:bg-stone-900 transition">
-        + Добавить
-      </button>
+      <button id="btn-add" class="px-5 py-2 bg-stone-800 text-white rounded-xl text-sm hover:bg-stone-900">+ Добавить</button>
     </div>
   </div>
 
-  <!-- Список -->
   <h2 class="font-semibold text-stone-800 mb-3">🔌 Внешние MCP серверы</h2>
-  <div id="servers-list" class="space-y-3">
-    <div class="text-stone-400 text-sm">Загрузка...</div>
-  </div>
+  <div id="servers-list" class="space-y-3"><div class="text-stone-400 text-sm">Загрузка...</div></div>
 
 </div>
 </div>
@@ -67,7 +63,7 @@ async function loadServers(){
   const list = document.getElementById('servers-list');
   const servers = await(await fetch('/api/mcp-servers')).json();
   if(!servers.length){
-    list.innerHTML='<div class="text-stone-400 text-sm">Серверов нет. Добавь первый!</div>';
+    list.innerHTML='<div class="text-stone-400 text-sm">Серверов нет.</div>';
     return;
   }
   list.innerHTML = servers.map(s=>`
@@ -89,61 +85,54 @@ async function loadServers(){
         </div>
       </div>
     </div>`).join('');
-  servers.forEach(s=>autoLoadTools(s.id));
+  servers.forEach(s=>autoTools(s.id));
 }
 
-async function autoLoadTools(id){
-  const el  = document.getElementById('tools-'+id);
-  const dot = document.getElementById('dot-'+id);
-  el.innerHTML = '<span class="text-xs text-stone-400">Загрузка...</span>';
+async function autoTools(id){
+  const el=document.getElementById('tools-'+id);
+  const dot=document.getElementById('dot-'+id);
+  el.innerHTML='<span class="text-xs text-stone-400">Загрузка...</span>';
   try{
-    const d = await(await fetch('/api/mcp-servers/'+id+'/tools')).json();
-    renderTools(id, d.tools, d.error);
+    const d=await(await fetch('/api/mcp-servers/'+id+'/tools')).json();
+    renderTools(id,d.tools,d.error);
   }catch(e){
     dot.className='w-2 h-2 bg-red-400 rounded-full shrink-0';
     el.innerHTML=`<span class="text-xs text-red-500">❌ ${e}</span>`;
   }
 }
 
-function renderTools(id, tools, error){
-  const el  = document.getElementById('tools-'+id);
-  const dot = document.getElementById('dot-'+id);
-  if(tools && tools.length){
+function renderTools(id,tools,error){
+  const el=document.getElementById('tools-'+id);
+  const dot=document.getElementById('dot-'+id);
+  if(tools&&tools.length){
     dot.className='w-2 h-2 bg-emerald-400 rounded-full shrink-0';
-    el.innerHTML=`
-      <div class="text-xs font-medium text-stone-600 mb-1.5">Инструментов: ${tools.length}</div>
-      <div class="flex flex-wrap gap-1.5">
-        ${tools.map(t=>{
-          const n = typeof t==='string'?t:(t.name||'?');
-          const d = typeof t==='object'?(t.description||''):'';
-          return `<span title="${d}" class="inline-block bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg px-2 py-0.5 text-xs cursor-help">${n}</span>`;
-        }).join('')}
-      </div>`;
-  } else {
+    el.innerHTML=`<div class="text-xs font-medium text-stone-600 mb-1.5">✅ Инструментов: ${tools.length}</div>
+      <div class="flex flex-wrap gap-1.5">${tools.map(t=>{
+        const n=typeof t==='string'?t:(t.name||'?');
+        const d=typeof t==='object'?(t.description||''):'';
+        return `<span title="${d}" class="inline-block bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg px-2 py-0.5 text-xs">${n}</span>`;
+      }).join('')}</div>`;
+  }else{
     dot.className='w-2 h-2 bg-red-400 rounded-full shrink-0';
-    const hint = error || 'проверь URL (нужен персональный URL с API ключом)';
-    el.innerHTML=`<span class="text-xs text-red-500">⚠️ Инструменты не обнаружены — ${hint}</span>`;
+    el.innerHTML=`<span class="text-xs text-red-500">⚠️ ${error||'Нет инструментов — проверь URL'}</span>`;
   }
 }
 
 async function testServer(id){
   const btn=document.getElementById('tbtn-'+id);
-  btn.disabled=true; btn.textContent='Тестирую...';
+  btn.disabled=true;btn.textContent='Тестирую...';
   try{
     const d=await(await fetch('/api/mcp-servers/'+id+'/test',{method:'POST'})).json();
-    renderTools(id, d.tools, d.success ? null : d.message);
-    if(!d.success) alert(d.message);
+    renderTools(id,d.tools,d.success?null:d.message);
+    if(!d.success)alert(d.message);
   }catch(e){alert('Ошибка: '+e);}
-  finally{btn.disabled=false; btn.textContent='🔗 Проверить';}
+  finally{btn.disabled=false;btn.textContent='🔗 Проверить';}
 }
 
 async function delServer(id){
-  if(!confirm('Удалить?')) return;
+  if(!confirm('Удалить?'))return;
   await fetch('/api/mcp-servers/'+id,{method:'DELETE'});
   document.getElementById('srv-'+id)?.remove();
-  if(!document.querySelector('[id^="srv-"]'))
-    document.getElementById('servers-list').innerHTML=
-      '<div class="text-stone-400 text-sm">Серверов нет. Добавь первый!</div>';
 }
 
 document.getElementById('btn-add').onclick=async function(){
@@ -151,15 +140,14 @@ document.getElementById('btn-add').onclick=async function(){
   const url=document.getElementById('add-url').value.trim();
   const token=document.getElementById('add-token').value.trim();
   if(!name||!url){alert('Введи имя и URL');return;}
-  this.disabled=true; this.textContent='Добавляю...';
+  this.disabled=true;this.textContent='Добавляю...';
   await fetch('/api/mcp-servers',{method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({name,url,auth_token:token})});
   ['add-name','add-url','add-token'].forEach(i=>document.getElementById(i).value='');
-  this.disabled=false; this.textContent='+ Добавить';
+  this.disabled=false;this.textContent='+ Добавить';
   loadServers();
 };
-
 loadServers();
 </script>
 {% endblock %}
