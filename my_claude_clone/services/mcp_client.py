@@ -3,7 +3,6 @@ import re
 import time
 import logging
 import requests
-import threading
 from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
@@ -21,10 +20,6 @@ BUILTIN_TOOLS = [
 
 
 class MCPClient:
-    """
-    MCP-клиент с поддержкой редиректов (301/302),
-    SSE dual-endpoint, Streamable HTTP и REST GET.
-    """
 
     def _hdrs(self, auth=None, accept_sse=False):
         h = {'Content-Type': 'application/json',
@@ -33,6 +28,32 @@ class MCPClient:
         if auth:
             h['Authorization'] = f'Bearer {auth}'
         return h
+
+    def _resolve_final_url(self, url, auth, timeout=8):
+        """
+        Разрешает цепочку 301/302 через HEAD-запросы
+        (без открытия SSE потока).
+        """
+        current = url
+        for _ in range(5):
+            try:
+                r = requests.head(current, headers=self._hdrs(auth),
+                                  allow_redirects=False, timeout=timeout)
+                if r.status_code in (301, 302, 307, 308):
+                    location = r.headers.get('Location', '')
+                    if not location:
+                        break
+                    if location.startswith('/'):
+                        p = urlparse(current)
+                        location = f"{p.scheme}://{p.netloc}{location}"
+                    logger.info('MCP redirect: %s -> %s', current, location)
+                    current = location
+                else:
+                    break
+            except Exception as e:
+                logger.debug('HEAD redirect failed: %s', e)
+                break
+        return current
 
     def _extract_tools(self, data):
         if not data:
@@ -64,112 +85,105 @@ class MCPClient:
                 pass
         return {}
 
-    def _resolve_url(self, url, auth, timeout=10):
+    def _sse_get_messages_url(self, sse_url, auth, timeout=10):
         """
-        Разрешает редиректы (301/302) и возвращает финальный URL.
-        Композио: mcp.composio.dev/... -> composio.dev/toolkits/...
-        """
-        try:
-            r = requests.head(url,
-                              headers=self._hdrs(auth),
-                              allow_redirects=True,
-                              timeout=timeout)
-            final = r.url
-            if final != url:
-                logger.info('MCP redirect: %s -> %s', url, final)
-            return final
-        except Exception:
-            return url
-
-    def _get_messages_url(self, sse_url, auth, timeout=10):
-        """
-        Двухэтапный SSE шаг 1:
-        GET /sse -> читаем event:endpoint data:/messages?sessionId=...
+        GET /sse без follow_redirects + stream=True.
+        Читаем строки пока не найдём data: /messages?...
         """
         try:
             resp = requests.get(
                 sse_url,
                 headers=self._hdrs(auth, accept_sse=True),
-                allow_redirects=True,
+                allow_redirects=False,   # НЕ следуем редиректам в потоке!
                 timeout=timeout,
                 stream=True
             )
-            if resp.status_code != 200:
-                logger.debug('GET /sse status=%d for %s', resp.status_code, sse_url)
+
+            # Если пришёл редирект — повторим на новый URL
+            if resp.status_code in (301, 302, 307, 308):
+                new_url = resp.headers.get('Location', '')
+                if new_url:
+                    if new_url.startswith('/'):
+                        p = urlparse(sse_url)
+                        new_url = f"{p.scheme}://{p.netloc}{new_url}"
+                    resp.close()
+                    return self._sse_get_messages_url(new_url, auth, timeout)
+                resp.close()
                 return None
 
-            # Читаем первые несколько строк до получения endpoint
+            if resp.status_code != 200:
+                resp.close()
+                return None
+
             base = f"{urlparse(resp.url).scheme}://{urlparse(resp.url).netloc}"
             messages_path = None
             lines_read = 0
-            for line in resp.iter_lines(decode_unicode=True):
+
+            for raw_line in resp.iter_lines(decode_unicode=True):
                 lines_read += 1
-                if lines_read > 30:
+                if lines_read > 50:
                     break
-                if not line:
+                if not raw_line:
                     continue
-                logger.debug('SSE line: %r', line)
-                if line.startswith('data:'):
-                    val = line[5:].strip()
+                logger.debug('SSE: %r', raw_line)
+                if raw_line.startswith('data:'):
+                    val = raw_line[5:].strip()
                     if val.startswith('/'):
                         messages_path = val
                         break
                     if val.startswith('http'):
                         resp.close()
                         return val
-            resp.close()
 
+            resp.close()
             if messages_path:
                 return base + messages_path
+
         except Exception as e:
-            logger.debug('_get_messages_url error: %s', e)
+            logger.debug('_sse_get_messages_url error: %s', e)
         return None
 
-    # ------------------------------------------------------------------ #
+    # -------------------------------------------------------------- #
     def list_tools(self, server, timeout=15):
         raw_url = server.url.rstrip('/')
         auth    = server.auth_token
 
-        # Разрешаем редиректы чтобы получить финальный URL
-        url = self._resolve_url(raw_url, auth, timeout=8)
+        # Разрешаем 301/302 через HEAD (без потока)
+        url = self._resolve_final_url(raw_url, auth)
         rpc = {'jsonrpc': '2.0', 'id': 1, 'method': 'tools/list', 'params': {}}
 
-        # ===== A: Streamable HTTP =====
+        # === A: Streamable HTTP (POST) ===
         for ep in ([url] if url.endswith('/mcp') else [url + '/mcp', url]):
             try:
                 r = requests.post(ep, json=rpc, headers=self._hdrs(auth),
                                   allow_redirects=True, timeout=timeout)
                 if r.status_code == 200:
                     ct = r.headers.get('Content-Type', '')
-                    data = self._parse_sse_text(r.text) if 'event-stream' in ct else r.json()
+                    data = self._parse_sse_text(r.text) if 'event-stream' in ct \
+                           else r.json()
                     tools = self._extract_tools(data)
                     if tools:
-                        logger.info('MCP %s: Streamable HTTP OK (%d)', server.name, len(tools))
+                        logger.info('MCP %s: Streamable HTTP OK (%d tools)',
+                                    server.name, len(tools))
                         return tools
             except Exception as e:
                 logger.debug('A failed (%s): %s', server.name, e)
 
-        # ===== B: SSE dual-endpoint =====
-        # Пробуем два варианта SSE URL
-        sse_candidates = []
-        if url.endswith('/sse'):
-            sse_candidates = [url]
-        else:
-            sse_candidates = [url + '/sse', url]
-
+        # === B: SSE dual-endpoint ===
+        sse_candidates = [url] if url.endswith('/sse') else [url + '/sse', url]
         for sse_url in sse_candidates:
             try:
-                messages_url = self._get_messages_url(sse_url, auth, timeout=timeout)
+                messages_url = self._sse_get_messages_url(sse_url, auth, timeout)
                 if not messages_url:
                     continue
-
                 logger.info('MCP %s: SSE messages_url=%s', server.name, messages_url)
 
                 # initialize
                 init_rpc = {'jsonrpc': '2.0', 'id': 0, 'method': 'initialize',
                             'params': {'protocolVersion': '2024-11-05',
                                        'capabilities': {},
-                                       'clientInfo': {'name': 'claude-clone', 'version': '1.0'}}}
+                                       'clientInfo': {'name': 'claude-clone',
+                                                      'version': '1.0'}}}
                 requests.post(messages_url, json=init_rpc,
                               headers=self._hdrs(auth),
                               allow_redirects=True, timeout=8)
@@ -180,15 +194,17 @@ class MCPClient:
                                    allow_redirects=True, timeout=timeout)
                 if r3.status_code in (200, 202):
                     ct = r3.headers.get('Content-Type', '')
-                    data = self._parse_sse_text(r3.text) if 'event-stream' in ct else r3.json()
+                    data = self._parse_sse_text(r3.text) if 'event-stream' in ct \
+                           else r3.json()
                     tools = self._extract_tools(data)
                     if tools:
-                        logger.info('MCP %s: SSE OK (%d tools)', server.name, len(tools))
+                        logger.info('MCP %s: SSE OK (%d tools)',
+                                    server.name, len(tools))
                         return tools
             except Exception as e:
                 logger.debug('B failed (%s %s): %s', server.name, sse_url, e)
 
-        # ===== C: REST GET /tools =====
+        # === C: REST GET /tools ===
         try:
             r = requests.get(url + '/tools', headers=self._hdrs(auth),
                              allow_redirects=True, timeout=8)
@@ -199,7 +215,7 @@ class MCPClient:
         except Exception:
             pass
 
-        # ===== D: /info /manifest /capabilities =====
+        # === D: /info /manifest /capabilities ===
         for ep in ['/info', '/manifest', '/capabilities']:
             try:
                 r = requests.get(url + ep, headers=self._hdrs(auth),
@@ -211,12 +227,12 @@ class MCPClient:
             except Exception:
                 pass
 
-        logger.warning('list_tools: нет инструментов %s (%s)', server.name, server.url)
+        logger.warning('list_tools: нет инструментов %s (%s)',
+                       server.name, server.url)
         return []
 
-    # ------------------------------------------------------------------ #
     def call_tool(self, server, tool_name, arguments, timeout=60):
-        url  = self._resolve_url(server.url.rstrip('/'), server.auth_token)
+        url  = self._resolve_final_url(server.url.rstrip('/'), server.auth_token)
         auth = server.auth_token
         rpc  = {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/call',
                  'params': {'name': tool_name, 'arguments': arguments or {}}}
@@ -226,16 +242,17 @@ class MCPClient:
                                   allow_redirects=True, timeout=timeout)
                 r.raise_for_status()
                 ct = r.headers.get('Content-Type', '')
-                data = self._parse_sse_text(r.text) if 'event-stream' in ct else r.json()
+                data = self._parse_sse_text(r.text) if 'event-stream' in ct \
+                       else r.json()
                 if 'error' in data:
-                    return f"Ошибка MCP: {data['error'].get('message', data['error'])}"
+                    return f"Ошибка: {data['error'].get('message', data['error'])}"
                 result  = data.get('result', {})
                 content = result.get('content', [])
                 texts   = [c['text'] for c in content
                            if isinstance(c, dict) and c.get('type') == 'text']
                 return '\n'.join(texts) if texts else str(result)
             except Exception as e:
-                logger.debug('call_tool %s failed: %s', target, e)
+                logger.debug('call_tool %s: %s', target, e)
         return f"Не удалось вызвать '{tool_name}'"
 
     def get_openai_tools_schema(self, servers):
@@ -245,12 +262,15 @@ class MCPClient:
                 name = t.get('name') if isinstance(t, dict) else str(t)
                 if not name:
                     continue
-                safe = re.sub(r'[^a-zA-Z0-9_]', '_', f'srv{srv.id}__{name}')[:64]
+                safe = re.sub(r'[^a-zA-Z0-9_]', '_',
+                              f'srv{srv.id}__{name}')[:64]
                 schema.append({'type': 'function', 'function': {
                     'name': safe,
-                    'description': (t.get('description') if isinstance(t, dict) else '') or
+                    'description': (t.get('description')
+                                    if isinstance(t, dict) else '') or
                                    f'MCP {name} ({srv.name})',
-                    'parameters': (t.get('inputSchema') if isinstance(t, dict) else None) or
+                    'parameters': (t.get('inputSchema')
+                                   if isinstance(t, dict) else None) or
                                   {'type': 'object', 'properties': {}}
                 }})
                 tool_map[safe] = (srv, name)
@@ -261,19 +281,20 @@ class MCPClient:
 
     def call(self, server_url, auth_token, prompt, timeout=60):
         """Legacy метод для job_executor."""
-        headers = self._hdrs(auth_token)
         payload = {'jsonrpc': '2.0', 'method': 'tools/call',
                    'params': {'prompt': prompt, 'name': 'claude_code'}, 'id': 1}
         try:
-            r = requests.post(server_url, json=payload, headers=headers,
+            r = requests.post(server_url, json=payload,
+                              headers=self._hdrs(auth_token),
                               allow_redirects=True, timeout=timeout)
             if r.status_code == 200:
-                ct   = r.headers.get('Content-Type', '')
-                data = self._parse_sse_text(r.text) if 'event-stream' in ct else r.json()
+                ct = r.headers.get('Content-Type', '')
+                data = self._parse_sse_text(r.text) \
+                       if 'event-stream' in ct else r.json()
                 return str(data.get('result', r.text))
         except Exception as e:
-            logger.warning('MCP.call failed: %s', e)
-        return f'Mock result: {prompt}'
+            logger.warning('MCP.call: %s', e)
+        return f'Mock: {prompt}'
 
 
 mcp_client = MCPClient()
